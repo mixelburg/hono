@@ -10,6 +10,15 @@ import type { Hono } from '../../hono'
 import type { Schema } from '../../types'
 import type { UnionToIntersection } from '../../utils/types'
 
+/*
+ * `testClient`'s return type mentions `ClientRequest`, which is declared in
+ * `client/types`. Consumers that infer that type and build with
+ * `declaration: true` cannot name it, because the module is not reachable
+ * through the package exports, and `tsc` fails with TS2883. Re-exporting it
+ * here gives the generated declaration a nameable reference.
+ */
+export type { ClientRequest } from '../../client/types'
+
 type ExtractEnv<T> = T extends Hono<infer E, Schema, string> ? E : never
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

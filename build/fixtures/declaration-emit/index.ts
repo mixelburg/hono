@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 import { createFactory } from 'hono/factory'
+import { testClient } from 'hono/testing'
 
 // Inferred types like these mention internal aliases from hono's declarations
 // (for example the return type of `c.json()`). Consumers that build with
@@ -8,3 +9,5 @@ export const handlers = createFactory().createHandlers((c) => c.json({ ok: true 
 
 export const app = new Hono().get('/', (c) => c.json({ ok: true }))
 export type AppType = typeof app
+
+export const client = testClient(app)
