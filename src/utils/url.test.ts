@@ -72,12 +72,21 @@ describe('url', () => {
 
     it('regex pattern', () => {
       const res = getPattern(':id{[0-9]+}')
-      expect(res).toEqual([':id{[0-9]+}', 'id', /^[0-9]+$/])
+      expect(res).toEqual([':id{[0-9]+}', 'id', /^(?:[0-9]+)$/])
     })
 
     it('regex pattern with next', () => {
       const res = getPattern(':id{[0-9]+}', 'next')
-      expect(res).toEqual([':id{[0-9]+}#next', 'id', /^[0-9]+(?=\/next)/])
+      expect(res).toEqual([':id{[0-9]+}#next', 'id', /^(?:[0-9]+)(?=\/next)/])
+    })
+
+    it('anchors the whole alternation', () => {
+      const res = getPattern(':lang{en|fr}')
+      const re = (res as readonly [string, string, RegExp])[2]
+      expect(re.test('en')).toBe(true)
+      expect(re.test('fr')).toBe(true)
+      expect(re.test('english')).toBe(false)
+      expect(re.test('xfr')).toBe(false)
     })
 
     it('wildcard', () => {

@@ -867,3 +867,19 @@ describe('Pattern spanning multiple parts', () => {
     })
   })
 })
+
+describe('Regexp alternation', () => {
+  const node = new Node()
+  node.insert('get', '/:lang{en|fr}', 'lang')
+  node.insert('get', '/x/:id', 'id')
+
+  it('matches every branch', () => {
+    expect(node.search('get', '/en')[0]).toEqual([['lang', { lang: 'en' }]])
+    expect(node.search('get', '/fr')[0]).toEqual([['lang', { lang: 'fr' }]])
+  })
+
+  it('does not match a path that merely contains a branch', () => {
+    expect(node.search('get', '/english')[0]).toEqual([])
+    expect(node.search('get', '/xfr')[0]).toEqual([])
+  })
+})
