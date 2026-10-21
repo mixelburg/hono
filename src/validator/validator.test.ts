@@ -203,6 +203,18 @@ describe('JSON', () => {
     expect(await res.json()).toEqual({ foo: 'bar' })
   })
 
+  it('Should validate if Content-Type is application/vnd.github.v3+json', async () => {
+    const res = await app.request('http://localhost/post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/vnd.github.v3+json',
+      },
+      body: JSON.stringify({ foo: 'bar' }),
+    })
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ foo: 'bar' })
+  })
+
   it('Should validate if Content-Type is application/vnd.api+json', async () => {
     const res = await app.request('http://localhost/post', {
       method: 'POST',
